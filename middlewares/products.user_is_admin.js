@@ -1,3 +1,4 @@
+// MIDDLEWARE PARA COMPROBAR SI EL USUARIO ES ADMINISTRADOR (basado en el token)
 const { response } = require('express');
 const jwt = require('jsonwebtoken');
 

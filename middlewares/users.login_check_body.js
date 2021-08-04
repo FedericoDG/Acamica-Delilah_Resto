@@ -1,3 +1,4 @@
+// MIDDLEWARE PARA COMPROBAR LOS CAMPOS DEL BODY AL HACER LOGIN PARA OBTENER UN TOKEN
 const { response } = require('express');
 const dataBase = require('../database/conection');
 const bcrypt = require('bcrypt');
@@ -33,7 +34,6 @@ const verifyBody = (req, res = response, next) => {
         user_id: response[0].user_id,
         username: response[0].username,
         role: response[0].role
-
       };
       next();
     }

@@ -1,3 +1,4 @@
+// MIDDLEWARE PARA COMPROBAR EL TOKEN (si viene en los headers y si es válido)
 const { response } = require('express');
 const jwt = require('jsonwebtoken');
 

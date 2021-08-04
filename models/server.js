@@ -8,7 +8,9 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.EXPRESS_PORT;
-    this.apiRoute = '/api';
+    this.usersRoutes = '/v1/users';
+    this.productsRoutes = '/v1/products';
+    this.ordersRoutes = '/v1/orders';
 
     this.middlewares();
     this.routes();
@@ -20,20 +22,21 @@ class Server {
     this.app.use(express.urlencoded({ extended: false }));
   }
   routes() {
-    this.app.use(this.apiRoute, require('../routes/api.routes'));
+    this.app.use(this.usersRoutes, require('../routes/users.routes'));
+    this.app.use(this.productsRoutes, require('../routes/products.routes'));
   }
   connection() {
     dataBase.connect((error) => {
       if (error) {
         throw new Error(error);
       }
-      console.log('Connected to MariaDB. Database:', process.env.MARIADB_DATABASE);
+      console.log(`Connected to database: ${process.env.MARIADB_DATABASE}`);
     });
   }
   listen() {
     this.app.listen(this.port, () => {
-      console.clear()
-      console.log('Server live on port:', this.port);
+      console.clear();
+      console.log(`Api live on: http://localhost:${this.port}`);
     });
   }
 }

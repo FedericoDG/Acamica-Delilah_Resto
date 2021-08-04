@@ -1,11 +1,11 @@
+// MIDDLEWARE PARA COMPROBAR EL BODY AL CREAR UN NUEVO USUARIO (se utilizan algunas expresiones regulares)
 const { response } = require('express');
 
-const checkUserame = /^[0-9a-zA-Z]{4,50}$/;
-const checkPassword = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{8,50}/;
-//const checkName = /^[a-zA-Z ]{4,50}$/;
-const checkName = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{4,50}$/;
-const checkEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const checkPhone = /^[0-9]{10}$/;
+const checkUserame = /^[0-9a-zA-Z]{4,50}$/; // Letras mayúsculas y minúsculas, números. Logitud entre 4 y 50 caracteres
+const checkPassword = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{8,50}/; // Al menos una letra mayúscula, una minúscula, un número y un caracter especial. Longitud entre 8 y 50 caracteres
+const checkName = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{4,50}$/; // Letras mayúsculas y minúsculas, y espacios. Longitud entre 4 y 50 caracteres
+const checkEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // Formato de email válido
+const checkPhone = /^[0-9]{10}$/; // Números. Longitud de 10 caracteres
 
 const verifyBody = (req, res = response, next) => {
   let { username, password, name, email, phone, address } = req.body;

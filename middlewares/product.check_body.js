@@ -1,3 +1,4 @@
+// MIDDLEWARE PARA COMPROBAR EL BODY AL CREAR O ACTUALIZAR UN PRODUCTO
 const { response } = require('express');
 
 const productBody = (req, res = response, next) => {
@@ -12,6 +13,7 @@ const productBody = (req, res = response, next) => {
       mensaje: 'El campo price debe ser un número'
     });
   }
+  req.product = { name, description, image, price: Number(price) };
   next();
 };
 
