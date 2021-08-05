@@ -3,7 +3,7 @@ const { Router } = require('express');
 const { getProducts, getProduct, createProduct, updateProduct } = require('../controllers/products.controllers');
 
 const checkToken = require('../middlewares/check_token');
-const isAdmin = require('../middlewares/products.user_is_admin');
+const isAdmin = require('../middlewares/is_admin');
 const verifyBodyProduct = require('../middlewares/product.check_body');
 
 const router = Router();
