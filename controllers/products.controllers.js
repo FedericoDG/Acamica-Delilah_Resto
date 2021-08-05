@@ -3,7 +3,7 @@ const { getAllProducts, getProductById, saveProductOnDB } = require('../helpers/
 
 const getProducts = async (req, res = response) => {
   try {
-    const products = await getAllProducts();
+    const products = await getAllProducts(req.headers.authorization.split(' ')[1]);
     res.json({
       products
     });
@@ -17,7 +17,7 @@ const getProducts = async (req, res = response) => {
 
 const getProduct = async (req, res) => {
   try {
-    const product = await getProductById(req.params.id);
+    const product = await getProductById(req.headers.authorization.split(' ')[1], req.params.id);
     res.json({
       product
     });
@@ -29,13 +29,28 @@ const getProduct = async (req, res) => {
   }
 };
 
-const createProduct = async(req, res) => {
+const createProduct = async (req, res) => {
   try {
     await saveProductOnDB(req.product);
     res.json({
       mensaje: 'Producto agregado a la base de datos.',
       prducto: req.product
-    });  
+    });
+  } catch (error) {
+    res.status(500).json({
+      mensaje: 'Ha ocurrido un error.',
+      error
+    });
+  }
+};
+
+const updateProduct = async (req, res) => {
+  try {
+    await saveProductOnDB(req.product);
+    res.json({
+      mensaje: 'Producto agregado a la base de datos.',
+      prducto: req.product
+    });
   } catch (error) {
     res.status(500).json({
       mensaje: 'Ha ocurrido un error.',
@@ -45,5 +60,5 @@ const createProduct = async(req, res) => {
 };
 
 module.exports = {
-  getProducts, getProduct, createProduct
+  getProducts, getProduct, createProduct, updateProduct
 };
