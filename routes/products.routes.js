@@ -1,10 +1,11 @@
 const { Router } = require('express');
 
-const { getProducts, getProduct, createProduct, updateProduct } = require('../controllers/products.controllers');
+const { getProducts, getProduct, createProduct, updateProduct, deleteProduct } = require('../controllers/products.controllers');
 
 const checkToken = require('../middlewares/check_token');
 const isAdmin = require('../middlewares/is_admin');
 const verifyBodyProduct = require('../middlewares/product.check_body');
+const idExist = require('../middlewares/products.id_exist');
 
 const router = Router();
 
@@ -18,19 +19,9 @@ router.get('/:id', [checkToken], getProduct);
 router.post('/', [checkToken, isAdmin, verifyBodyProduct], createProduct);
 
 // ACTUALIZAR UN PRODUCTO
-router.put('/:id', [checkToken, isAdmin, verifyBodyProduct], updateProduct);
+router.put('/:id', [checkToken, isAdmin, idExist, verifyBodyProduct], updateProduct);
 
-router.post('/borrar/', (req, res) => {
-  console.log(req.body.length)
-  console.log(Array.isArray(req.body))
-  let arr =[]
-  req.body.forEach(el =>{
-    arr.push(el.cantidad)
-  })
-  console.log(arr)
-  res.json({
-    respuesta: req.body
-  });
-});
+// ELIMINAR UN PRODUCTO
+router.delete('/:id', [checkToken, isAdmin, idExist], deleteProduct);
 
 module.exports = router;

@@ -1,3 +1,4 @@
+// CONEXIÓN A LA BASE DE DATOS (modificar los datos del archivo .env)
 const mysql = require('mysql')
 
 const dataBase = mysql.createConnection({

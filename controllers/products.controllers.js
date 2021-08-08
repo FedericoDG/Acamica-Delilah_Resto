@@ -1,10 +1,13 @@
 const { response } = require('express');
-const { getAllProducts, getProductById, saveProductOnDB } = require('../helpers/helpers');
+const { getAllProducts, getProductById, saveProductOnDB, updateProductOnDB, deleteProductOnDB } = require('../helpers/helpers');
 
+// OBTENER TODOS LOS PRODUCTOS
 const getProducts = async (req, res = response) => {
   try {
-    const products = await getAllProducts(req.headers.authorization.split(' ')[1]);
+    const token = req.headers.authorization.split(' ')[1];
+    const products = await getAllProducts(token);
     res.json({
+      mensaje: 'Lista de productos.',
       products
     });
   } catch (error) {
@@ -15,11 +18,15 @@ const getProducts = async (req, res = response) => {
   }
 };
 
+// OBTENER UN PRODUCTO POR PRODUCT_ID
 const getProduct = async (req, res) => {
   try {
-    const product = await getProductById(req.headers.authorization.split(' ')[1], req.params.id);
+    const { id } = req.params;
+    const token = req.headers.authorization.split(' ')[1];
+    const product = await getProductById(token, id);
     res.json({
-      product
+      mensaje: 'Producto encontrado.',
+      producto: product
     });
   } catch (error) {
     res.status(500).json({
@@ -29,12 +36,13 @@ const getProduct = async (req, res) => {
   }
 };
 
+// CREAR UN PRODUCTO
 const createProduct = async (req, res) => {
   try {
-    await saveProductOnDB(req.product);
+    const product = await saveProductOnDB(req.product);
     res.json({
-      mensaje: 'Producto agregado a la base de datos.',
-      prducto: req.product
+      mensaje: 'Producto agregado.',
+      producto: { product_id: product.insertId, ...req.product }
     });
   } catch (error) {
     res.status(500).json({
@@ -44,12 +52,14 @@ const createProduct = async (req, res) => {
   }
 };
 
+// ACTUALIZAR UN PRODUCTO
 const updateProduct = async (req, res) => {
   try {
-    await saveProductOnDB(req.product);
+    const { id } = req.params;
+    await updateProductOnDB(req.product, id);
     res.json({
-      mensaje: 'Producto agregado a la base de datos.',
-      prducto: req.product
+      mensaje: 'Producto actualizado.',
+      producto: { product_id: id, ...req.product }
     });
   } catch (error) {
     res.status(500).json({
@@ -57,8 +67,21 @@ const updateProduct = async (req, res) => {
       error
     });
   }
+};
+
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const token = req.headers.authorization.split(' ')[1];
+  console.log('vamos bien');
+  const producto = await getProductById(token, id);
+  await deleteProductOnDB(id);
+  console.log();
+  res.json({
+    mensaje: 'Producto eliminado.',
+    producto
+  });
 };
 
 module.exports = {
-  getProducts, getProduct, createProduct, updateProduct
+  getProducts, getProduct, createProduct, updateProduct, deleteProduct
 };

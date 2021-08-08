@@ -1,14 +1,14 @@
 {
   "name": "delilah_resto",
   "version": "1.0.0",
-  "description": "",
+  "description": "API Rest para generar pedidos.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["api", "rest", "pedidos", "restaurante"],
+  "author": "Federico González - fede@nazgul.com.ar",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",

@@ -19,11 +19,12 @@ class Server {
   middlewares() {
     this.app.use(cors());
     this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(express.urlencoded({ extended: true }));
   }
   routes() {
     this.app.use(this.usersRoutes, require('../routes/users.routes'));
     this.app.use(this.productsRoutes, require('../routes/products.routes'));
+    this.app.use(this.ordersRoutes, require('../routes/orders.routes.js'));
   }
   connection() {
     dataBase.connect((error) => {
