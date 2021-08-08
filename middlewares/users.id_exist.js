@@ -17,7 +17,7 @@ const userIdExist = async (req, res = response, next) => {
     });
     if (resp.length < 1) {
       return res.status(404).json({
-        mensaje: 'No existe un usuario con ese id.'
+        mensaje: `No existe un usuario con el user_id: ${id}.`
       });
     }
     next();

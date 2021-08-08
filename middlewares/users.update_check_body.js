@@ -27,7 +27,7 @@ const verifyBodyUpdate = (req, res = response, next) => {
       mensaje: 'El campo phone debe tener exactemente 10 caracteres númericos.'
     });
   }
-  req.user = { password, name, phone, address }
+  req.user = { password, name, phone, address };
   next();
 };
 

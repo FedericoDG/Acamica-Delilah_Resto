@@ -18,7 +18,7 @@ const userIdHasOrderId = async (req, res, next) => {
       }
     });
   });
-  consulta = consulta[0]?.user_id || -1
+  consulta = consulta[0]?.user_id || -1;
   if (role !== 'ADMIN') {
     if (consulta != user_id) {
       return res.status(401).json({

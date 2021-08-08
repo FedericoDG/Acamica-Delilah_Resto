@@ -25,6 +25,7 @@ class Server {
     this.app.use(this.usersRoutes, require('../routes/users.routes'));
     this.app.use(this.productsRoutes, require('../routes/products.routes'));
     this.app.use(this.ordersRoutes, require('../routes/orders.routes.js'));
+    this.app.use((_, res) => res.status(404).send('Ruta no encontrada.'));
   }
   connection() {
     dataBase.connect((error) => {

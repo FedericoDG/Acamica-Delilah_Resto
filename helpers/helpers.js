@@ -18,7 +18,7 @@ const decodeToken = (token) => {
   return jwt.decode(token, process.env.SECRET);
 };
 
-// OBTENER TODOS LOS USUARIOS (Para AADMIN: muestra todos los usuarios. Para USER: muestra los datos propios)
+// OBTENER TODOS LOS USUARIOS (Para ADMIN: muestra todos los usuarios. Para USER: muestra los datos propios)
 const getAllUsers = (token) => {
   let sqlQuery = "";
   const role = decodeToken(token, process.env.SECRET).role;
@@ -29,28 +29,28 @@ const getAllUsers = (token) => {
     sqlQuery = `SELECT user_id, name, name, email, phone, address FROM users WHERE user_id = ${user_id}`;
   }
   return new Promise((resolve, reject) => {
-    dataBase.query(sqlQuery, (error, data) => {
+    dataBase.query(sqlQuery, (error, users) => {
       if (error) {
         reject(error);
       } else {
-        resolve(data);
+        resolve(users);
       }
     });
   });
 };
 
-// OBTENER DATOS DE UN USUARIO EN PARTICULAR (Para ADMIN: Muestra los datos un un usuario. Para USER: Muestra los datos Propios)
+// OBTENER DATOS DE UN USUARIO EN PARTICULAR (Para ADMIN: Muestra los datos de un usuario siempre. Para USER: Muestra los datos propios)
 const getUserById = (token, id) => {
   let sqlQuery = 'SELECT user_id, name, name, email, phone, address FROM users WHERE user_id = ?';
   if (decodeToken(token, process.env.SECRET).role === 'ADMIN') {
     sqlQuery = "SELECT * FROM users WHERE user_id = ?";
   }
   return new Promise((resolve, reject) => {
-    dataBase.query(sqlQuery, [id], (error, data) => {
+    dataBase.query(sqlQuery, [id], (error, user) => {
       if (error) {
         reject(error);
       } else {
-        resolve(data);
+        resolve(user);
       }
     });
   });
@@ -60,25 +60,25 @@ const getUserById = (token, id) => {
 const saveUserOnDB = (user) => {
   const sqlQuery = "INSERT INTO users SET ?";
   return new Promise((resolve, reject) => {
-    dataBase.query(sqlQuery, [user], (error, data) => {
+    dataBase.query(sqlQuery, [user], (error, user) => {
       if (error) {
         return reject(error);
       } else {
-        return resolve(data);
+        return resolve(user);
       }
     });
-  });
+  }); user;
 };
 
 // ACTUALIZAR USUARIO EN LA BASE DE DATOS (Solo ADMIN)
 const updateUserOnDB = (user, id) => {
   const sqlQuery = "UPDATE users SET password = ?, name = ?, phone= ?, address = ? WHERE user_id = ?";
   return new Promise((resolve, reject) => {
-    dataBase.query(sqlQuery, [user.password, user.name, user.phone, user.address, id], (error, data) => {
+    dataBase.query(sqlQuery, [user.password, user.name, user.phone, user.address, id], (error, user) => {
       if (error) {
         return reject(error);
       } else {
-        return resolve(data);
+        return resolve(user);
       }
     });
   });
@@ -88,11 +88,11 @@ const updateUserOnDB = (user, id) => {
 const deleteUserOnDB = (id) => {
   const sqlQuery = "DELETE FROM users WHERE user_id = ?";
   return new Promise((resolve, reject) => {
-    dataBase.query(sqlQuery, [id], (error, data) => {
+    dataBase.query(sqlQuery, [id], (error, user) => {
       if (error) {
         reject(error);
       } else {
-        return resolve(data);
+        return resolve(user);
       }
     });
   });
@@ -105,11 +105,11 @@ const getAllProducts = (token) => {
     sqlQuery = "SELECT * FROM products";
   }
   return new Promise((resolve, reject) => {
-    dataBase.query(sqlQuery, (error, data) => {
+    dataBase.query(sqlQuery, (error, products) => {
       if (error) {
         return reject(error);
       }
-      return resolve(data);
+      return resolve(products);
     });
   });
 };
@@ -121,14 +121,14 @@ const getProductById = (token, id) => {
     sqlQuery = "SELECT * FROM products WHERE product_id = ?";
   }
   return new Promise((resolve, reject) => {
-    dataBase.query(sqlQuery, [id], (error, data) => {
+    dataBase.query(sqlQuery, [id], (error, product) => {
       if (error) {
         return reject(error);
       }
-      if (data.length < 1) {
+      if (product.length < 1) {
         return resolve('No existe un producto con ese product_id.');
       }
-      return resolve(JSON.parse(JSON.stringify(data[0])));
+      return resolve(JSON.parse(JSON.stringify(product[0])));
     });
   });
 };
@@ -137,11 +137,11 @@ const getProductById = (token, id) => {
 const saveProductOnDB = (product) => {
   const sqlQuery = "INSERT INTO products SET ?";
   return new Promise((resolve, reject) => {
-    dataBase.query(sqlQuery, [product], (error, data) => {
+    dataBase.query(sqlQuery, [product], (error, product) => {
       if (error) {
         return reject(error);
       } else {
-        return resolve(data);
+        return resolve(product);
       }
     });
   });
@@ -151,17 +151,17 @@ const saveProductOnDB = (product) => {
 const updateProductOnDB = (product, id) => {
   const sqlQuery = "UPDATE products SET name = ?, description = ?, image = ?, price= ? WHERE product_id = ?";
   return new Promise((resolve, reject) => {
-    dataBase.query(sqlQuery, [product.name, product.description, product.image, product.price, id], (error, data) => {
+    dataBase.query(sqlQuery, [product.name, product.description, product.image, product.price, id], (error, product) => {
       if (error) {
         return reject(error);
       } else {
-        return resolve(data);
+        return resolve(product);
       }
     });
   });
 };
 
-/*  */
+// ELIMINAR UN PRODUCTO EN LA BASE DE DATOS (Solo ADMIN)
 const deleteProductOnDB = (id) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = "DELETE FROM products WHERE product_id = ?";
@@ -175,7 +175,7 @@ const deleteProductOnDB = (id) => {
   });
 };
 
-// OBTENER TODAS LAS ORDENES DE UN USUARIO (sólo las id) 
+// OBTENER TODAS LAS ORDENES DE UN USUARIO (Solo retorna las id) 
 const getAllOrdersByUserId = async (id) => {
   try {
     const arrayOrdersIds = await new Promise((resolve, reject) => {
@@ -199,7 +199,7 @@ const getAllOrdersByUserId = async (id) => {
   }
 };
 
-// OBTENER TODAS LAS ORDENES DE TODOS LOS USUARIOS (sólo las id) 
+// OBTENER TODAS LAS ORDENES DE TODOS LOS USUARIOS (Solo retorna las id. Solo ADMIN) 
 const getAllOrdersonDB = async () => {
   try {
     const arrayOrdersIds = await new Promise((resolve, reject) => {
@@ -224,7 +224,7 @@ const getAllOrdersonDB = async () => {
 
 };
 
-// OBTENER TODAS LAS ORDENES DETALLADAS DE UN USUARIO 
+// OBTENER TODAS LAS ORDENES DETALLADAS DE UN USUARIO (Para ADMIN: Muestra órdenes detalladas. Para USER: Muestra las órdenes SOLO si son propias)
 const getAllOrdesDetails = async (arrayOrders) => {
   try {
     let arrayOrdersDetails = [];
@@ -242,7 +242,7 @@ const getAllOrdesDetails = async (arrayOrders) => {
   }
 };
 
-// OBTENER ORDENEN DETALLADA
+// OBTENER ORDENEN DETALLADA (Para ADMIN: Muestra una orden detallada siempre. Para USER: Muestra una orden detallada SOLO si es propia)
 const getOrderDetailByOrderId = async (orderId) => {
   try {
     const order_id = await new Promise((resolve, reject) => {
@@ -379,7 +379,8 @@ const getPrice = async (order_id, order) => {
       resultado += productsQuantity[index] * prices[index];
     }
     return new Promise((resolve, reject) => {
-      dataBase.query("UPDATE orders SET total = ? WHERE order_id = ?", [resultado, order_id], (error, data) => {
+      const sqlQuery = "UPDATE orders SET total = ? WHERE order_id = ?";
+      dataBase.query(sqlQuery, [resultado, order_id], (error, data) => {
         if (error) {
           reject(error);
         } else {
@@ -395,7 +396,8 @@ const getPrice = async (order_id, order) => {
 // función auxiliar para obtener el precio de un producto
 const price = (id) => {
   return new Promise((resolve, reject) => {
-    dataBase.query("SELECT price FROM products WHERE product_id = ?", [id], (error, data) => {
+    const sqlQuery = "SELECT price FROM products WHERE product_id = ?";
+    dataBase.query(sqlQuery, [id], (error, data) => {
       if (error) {
         reject(error);
       } else {
@@ -404,6 +406,35 @@ const price = (id) => {
     });
   });
 };
+
+// ACTUALIZAR EL ESTADO DE UNA ORDER (Solo ADMIN)
+const updateOrderOnDB = (status, order_id) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = "UPDATE orders SET status = ? WHERE order_id = ?";
+    dataBase.query(sqlQuery, [status, order_id], (error, order) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(order);
+      }
+    });
+  });
+};
+
+// ELIMINAR ORDEN DE LA BASE DE DATOS (Solo ADMIN)
+const deleteOrderonDB = (id) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = "DELETE FROM orders WHERE order_id = ?";
+    dataBase.query(sqlQuery, [id], (error, order) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(order);
+      }
+    });
+  });
+};
+
 
 module.exports = {
   hashPassword,
@@ -424,5 +455,7 @@ module.exports = {
   getOrderDetailByOrderId,
   getAllOrdersonDB,
   saveOrderOnDB,
-  getPrice
+  getPrice,
+  updateOrderOnDB,
+  deleteOrderonDB
 };

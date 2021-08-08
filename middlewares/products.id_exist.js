@@ -7,7 +7,7 @@ const idExist = async (req, res = response, next) => {
   const product = await check(id);
   if (product !== 'OK') {
     return res.status(404).json({
-      mensaje: `No existe un producto con product_id: ${product}`
+      mensaje: `No existe un producto con el product_id: ${product}.`
     });
   }
   next();
@@ -15,7 +15,8 @@ const idExist = async (req, res = response, next) => {
 
 const check = (id) => {
   return new Promise((resolve, reject) => {
-    dataBase.query("SELECT product_id FROM products WHERE product_id = ?", [id], (error, data) => {
+    const sqlQuery = "SELECT product_id FROM products WHERE product_id = ?";
+    dataBase.query(sqlQuery, [id], (error, data) => {
       if (error) {
         reject(error);
       } else {

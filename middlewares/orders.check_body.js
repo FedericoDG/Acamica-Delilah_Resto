@@ -67,7 +67,8 @@ const ordersCheckBody = async (req, res = response, next) => {
 
 const checkExistProdcut = (id) => {
   return new Promise((resolve, reject) => {
-    dataBase.query("SELECT product_id FROM products WHERE product_id = ?", [id], (error, data) => {
+    const sqlQuery = "SELECT product_id FROM products WHERE product_id = ?";
+    dataBase.query(sqlQuery, [id], (error, data) => {
       if (error) {
         reject(error);
       } else {

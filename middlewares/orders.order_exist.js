@@ -17,7 +17,7 @@ const orderExist = async (req, res = response, next) => {
     });
     if (resp.length < 1) {
       return res.status(404).json({
-        mensaje: 'No existe una order con ese order_id'
+        mensaje: `No existe una order con el order_id: ${id}.`
       });
     }
     next();

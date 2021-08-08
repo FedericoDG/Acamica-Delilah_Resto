@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { getAllOrdersByUserId, getAllOrdesDetails, getOrderDetailByOrderId, getAllOrdersonDB, saveOrderOnDB, getPrice } = require('../helpers/helpers');
+const { getAllOrdersByUserId, getAllOrdesDetails, getOrderDetailByOrderId, getAllOrdersonDB, saveOrderOnDB, getPrice, deleteOrderonDB, updateOrderOnDB } = require('../helpers/helpers');
 
 // OBTENER TODAS LAS ORDENES
 const getAllOrders = async (req, res = response) => {
@@ -24,7 +24,7 @@ const getOrder = async (req, res) => {
     const order = (await getOrderDetailByOrderId(id))[0];
     res.json({
       mensaje: 'Orden encontrada.',
-      order
+      orden: order
     });
   } catch (error) {
     res.status(500).json({
@@ -61,7 +61,7 @@ const postOrder = async (req, res = response) => {
     getPrice(order_id, order);
     res.json({
       mensage: 'Orden creada.',
-      order: (await getOrderDetailByOrderId(order_id))[0]
+      orden: (await getOrderDetailByOrderId(order_id))[0]
     });
   } catch (error) {
     res.status(500).json({
@@ -71,5 +71,41 @@ const postOrder = async (req, res = response) => {
   }
 };
 
+// ACTUALIZAR EL ESTADO DE UNA ORDEN
+const updateOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req;
+    await updateOrderOnDB(status, id);
+    const order = (await getOrderDetailByOrderId(id))[0];
+    res.json({
+      mensage: 'Estado de la orden actualizado.',
+      orden: order
+    });
+  } catch (error) {
+    res.json({
+      mensage: 'Orden eliminada.',
+      orden: order
+    });
+  }
+};
 
-module.exports = { getUserOrders, getOrder, getAllOrders, postOrder };
+// ELIMINAR UNA ORDEN
+const deleteOrder = async (req, res = response) => {
+  try {
+    const { id } = req.params;
+    const order = (await getOrderDetailByOrderId(id))[0];
+    await deleteOrderonDB(id);
+    res.json({
+      mensage: 'Orden eliminada.',
+      orden: order
+    });
+  } catch (error) {
+    res.status(500).json({
+      mensaje: 'Ha ocurrido un error.',
+      error
+    });
+  }
+};
+
+module.exports = { getUserOrders, getOrder, getAllOrders, postOrder, updateOrder, deleteOrder };
