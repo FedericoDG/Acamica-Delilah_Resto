@@ -5,14 +5,8 @@ const dataBase = mysql.createConnection({
   host: process.env.MARIADB_HOST,
   user: process.env.MARIADB_USER,
   password: process.env.MARIADB_PASSWORD,
-  database: process.env.MARIADB_DATABASE
-});
-
-console.log({
-  host: process.env.MARIADB_HOST,
-  user: process.env.MARIADB_USER,
-  password: process.env.MARIADB_PASSWORD,
-  database: process.env.MARIADB_DATABASE
+  database: process.env.MARIADB_DATABASE,
+  connectTimeout: 20000
 });
 
 module.exports = dataBase;
