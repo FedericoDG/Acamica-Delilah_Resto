@@ -39,6 +39,12 @@ class Server {
     this.app.listen(this.port, () => {
       console.clear();
       console.log(`Api live on: http://localhost:${this.port}`);
+      console.log({
+        host: process.env.MARIADB_HOST,
+        user: process.env.MARIADB_USER,
+        password: process.env.MARIADB_PASSWORD,
+        database: process.env.MARIADB_DATABASE
+      });
     });
   }
 }
