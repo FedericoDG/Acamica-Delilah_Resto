@@ -7,7 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
-  "keywords": ["api", "rest", "pedidos", "restaurante"],
+  "keywords": [
+    "api",
+    "rest",
+    "pedidos",
+    "restaurante"
+  ],
   "author": "Federico González - fede@nazgul.com.ar",
   "license": "ISC",
   "dependencies": {

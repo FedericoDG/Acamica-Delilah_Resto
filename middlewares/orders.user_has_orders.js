@@ -17,7 +17,7 @@ const userHasOrder = async (req, res = response, next) => {
     });
     if (resp.length < 1) {
       return res.status(404).json({
-        mensaje: 'No existen órdenes para ese user_id'
+        mensaje: `No existen órdenes para el user_id: ${id}.`
       });
     }
     next();

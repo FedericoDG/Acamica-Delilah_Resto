@@ -1,5 +1,13 @@
 const { response } = require('express');
-const { getAllUsers, getUserById, hashPassword, saveUserOnDB, createToken, updateUserOnDB, deleteUserOnDB } = require('../helpers/helpers');
+const {
+  getAllUsers,
+  getUserById,
+  hashPassword,
+  saveUserOnDB,
+  createToken,
+  updateUserOnDB,
+  deleteUserOnDB
+} = require('../helpers/helpers');
 
 // OBTENER USUARIOS
 const getUsers = async (req, res = response) => {
@@ -107,5 +115,10 @@ const deleteUser = async (req, res = response) => {
 };
 
 module.exports = {
-  registerUser, loginUser, getUsers, getUser, updateUser, deleteUser
+  registerUser,
+  loginUser,
+  getUsers,
+  getUser,
+  updateUser,
+  deleteUser
 };

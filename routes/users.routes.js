@@ -1,6 +1,13 @@
 const { Router } = require('express');
 
-const { registerUser, loginUser, getUsers, getUser, updateUser, deleteUser } = require('../controllers/users.controllers');
+const {
+  registerUser,
+  loginUser,
+  getUsers,
+  getUser,
+  updateUser,
+  deleteUser
+} = require('../controllers/users.controllers');
 
 const verifyBodyRegister = require('../middlewares/users.register_check_body');
 const verifyBodyLogin = require('../middlewares/users.login_check_body');
@@ -31,6 +38,5 @@ router.put('/:id', [checkToken, idEqualUserid, verifyBodyUpdate, userIdExist], u
 
 // ELIMINAR USUARIO POR ID (sólo ADMIN)
 router.delete('/:id', [checkToken, isAdmin, userIdExist], deleteUser);
-
 
 module.exports = router;

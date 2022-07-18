@@ -69,13 +69,12 @@ const updateProduct = async (req, res) => {
   }
 };
 
+// ELIMINAR UN PRODUCTO
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
   const token = req.headers.authorization.split(' ')[1];
-  console.log('vamos bien');
   const producto = await getProductById(token, id);
   await deleteProductOnDB(id);
-  console.log();
   res.json({
     mensaje: 'Producto eliminado.',
     producto
@@ -83,5 +82,9 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = {
-  getProducts, getProduct, createProduct, updateProduct, deleteProduct
+  getProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct
 };

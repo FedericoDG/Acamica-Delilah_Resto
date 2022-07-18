@@ -1,13 +1,23 @@
 const { response } = require('express');
-const { getAllOrdersByUserId, getAllOrdesDetails, getOrderDetailByOrderId, getAllOrdersonDB, saveOrderOnDB, getPrice, deleteOrderonDB, updateOrderOnDB } = require('../helpers/helpers');
+const {
+  getAllOrdersByUserId,
+  getAllOrdesDetails,
+  getOrderDetailByOrderId,
+  getAllOrdersonDB,
+  saveOrderOnDB,
+  getPrice,
+  deleteOrderonDB,
+  updateOrderOnDB
+} = require('../helpers/helpers');
 
 // OBTENER TODAS LAS ORDENES
 const getAllOrders = async (req, res = response) => {
   try {
     const arrayOrdersDetails = await getAllOrdesDetails(await getAllOrdersonDB());
+    console.log(arrayOrdersDetails);
     res.json({
       mensaje: 'Lista de todas las órdenes.',
-      ordenes: arrayOrdersDetails[0]
+      ordenes: arrayOrdersDetails
     });
   } catch (error) {
     res.status(500).json({

@@ -5,7 +5,7 @@ const dataBase = require('../database/conection');
 
 // ENCRIPTAR PASSWORD
 const hashPassword = (password) => {
-  return hashedPassword = bcrypt.hashSync(password, 10);
+  return (hashedPassword = bcrypt.hashSync(password, 10));
 };
 
 // CREAR TOKEN
@@ -20,10 +20,10 @@ const decodeToken = (token) => {
 
 // OBTENER TODOS LOS USUARIOS (Para ADMIN: muestra todos los usuarios. Para USER: muestra los datos propios)
 const getAllUsers = (token) => {
-  let sqlQuery = "";
+  let sqlQuery = '';
   const role = decodeToken(token, process.env.SECRET).role;
   if (role === 'ADMIN') {
-    sqlQuery = "SELECT * FROM users";
+    sqlQuery = 'SELECT * FROM users';
   } else {
     const user_id = decodeToken(token, process.env.SECRET).user_id;
     sqlQuery = `SELECT user_id, name, name, email, phone, address FROM users WHERE user_id = ${user_id}`;
@@ -43,7 +43,7 @@ const getAllUsers = (token) => {
 const getUserById = (token, id) => {
   let sqlQuery = 'SELECT user_id, name, name, email, phone, address FROM users WHERE user_id = ?';
   if (decodeToken(token, process.env.SECRET).role === 'ADMIN') {
-    sqlQuery = "SELECT * FROM users WHERE user_id = ?";
+    sqlQuery = 'SELECT * FROM users WHERE user_id = ?';
   }
   return new Promise((resolve, reject) => {
     dataBase.query(sqlQuery, [id], (error, user) => {
@@ -58,7 +58,7 @@ const getUserById = (token, id) => {
 
 // GUARDAR USUARIO EN LA BASE DE DATOS
 const saveUserOnDB = (user) => {
-  const sqlQuery = "INSERT INTO users SET ?";
+  const sqlQuery = 'INSERT INTO users SET ?';
   return new Promise((resolve, reject) => {
     dataBase.query(sqlQuery, [user], (error, user) => {
       if (error) {
@@ -67,12 +67,13 @@ const saveUserOnDB = (user) => {
         return resolve(user);
       }
     });
-  }); user;
+  });
+  user;
 };
 
 // ACTUALIZAR USUARIO EN LA BASE DE DATOS (Solo ADMIN)
 const updateUserOnDB = (user, id) => {
-  const sqlQuery = "UPDATE users SET password = ?, name = ?, phone= ?, address = ? WHERE user_id = ?";
+  const sqlQuery = 'UPDATE users SET password = ?, name = ?, phone= ?, address = ? WHERE user_id = ?';
   return new Promise((resolve, reject) => {
     dataBase.query(sqlQuery, [user.password, user.name, user.phone, user.address, id], (error, user) => {
       if (error) {
@@ -86,7 +87,7 @@ const updateUserOnDB = (user, id) => {
 
 // ELIMINAR USUARIO DE LA BASE DE DATOS (Solo ADMIN)
 const deleteUserOnDB = (id) => {
-  const sqlQuery = "DELETE FROM users WHERE user_id = ?";
+  const sqlQuery = 'DELETE FROM users WHERE user_id = ?';
   return new Promise((resolve, reject) => {
     dataBase.query(sqlQuery, [id], (error, user) => {
       if (error) {
@@ -102,7 +103,7 @@ const deleteUserOnDB = (id) => {
 const getAllProducts = (token) => {
   let sqlQuery = "SELECT product_id, name, description, image, price FROM products WHERE active = 'TRUE'";
   if (decodeToken(token, process.env.SECRET).role === 'ADMIN') {
-    sqlQuery = "SELECT * FROM products";
+    sqlQuery = 'SELECT * FROM products';
   }
   return new Promise((resolve, reject) => {
     dataBase.query(sqlQuery, (error, products) => {
@@ -114,11 +115,11 @@ const getAllProducts = (token) => {
   });
 };
 
-// OBTENER UN PRODUCTO (por product_id y sólo si el campo active es TRUE, salvo para ADMIN que muestra todos) 
+// OBTENER UN PRODUCTO (por product_id y sólo si el campo active es TRUE, salvo para ADMIN que muestra todos)
 const getProductById = (token, id) => {
   let sqlQuery = "SELECT product_id, name, description, image, price FROM products WHERE product_id = ? AND active= 'TRUE'";
   if (decodeToken(token, process.env.SECRET).role === 'ADMIN') {
-    sqlQuery = "SELECT * FROM products WHERE product_id = ?";
+    sqlQuery = 'SELECT * FROM products WHERE product_id = ?';
   }
   return new Promise((resolve, reject) => {
     dataBase.query(sqlQuery, [id], (error, product) => {
@@ -135,7 +136,7 @@ const getProductById = (token, id) => {
 
 // GUARDAR PRODUCTO EN LA BASE DE DATOS (Solo ADMIN)
 const saveProductOnDB = (product) => {
-  const sqlQuery = "INSERT INTO products SET ?";
+  const sqlQuery = 'INSERT INTO products SET ?';
   return new Promise((resolve, reject) => {
     dataBase.query(sqlQuery, [product], (error, product) => {
       if (error) {
@@ -149,7 +150,7 @@ const saveProductOnDB = (product) => {
 
 // ACTUALIZAR UN PRODUCTO EN LA BASE DE DATOS (Solo ADMIN)
 const updateProductOnDB = (product, id) => {
-  const sqlQuery = "UPDATE products SET name = ?, description = ?, image = ?, price= ? WHERE product_id = ?";
+  const sqlQuery = 'UPDATE products SET name = ?, description = ?, image = ?, price= ? WHERE product_id = ?';
   return new Promise((resolve, reject) => {
     dataBase.query(sqlQuery, [product.name, product.description, product.image, product.price, id], (error, product) => {
       if (error) {
@@ -164,7 +165,7 @@ const updateProductOnDB = (product, id) => {
 // ELIMINAR UN PRODUCTO EN LA BASE DE DATOS (Solo ADMIN)
 const deleteProductOnDB = (id) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = "DELETE FROM products WHERE product_id = ?";
+    const sqlQuery = 'DELETE FROM products WHERE product_id = ?';
     dataBase.query(sqlQuery, [id], (error, product) => {
       if (error) {
         reject(error);
@@ -175,18 +176,18 @@ const deleteProductOnDB = (id) => {
   });
 };
 
-// OBTENER TODAS LAS ORDENES DE UN USUARIO (Solo retorna las id) 
+// OBTENER TODAS LAS ORDENES DE UN USUARIO (Solo retorna las id)
 const getAllOrdersByUserId = async (id) => {
   try {
     const arrayOrdersIds = await new Promise((resolve, reject) => {
-      const sqlQuery = "SELECT order_id FROM orders WHERE user_id = ?";
+      const sqlQuery = 'SELECT order_id FROM orders WHERE user_id = ?';
       dataBase.query(sqlQuery, [id], (error, data) => {
         if (error) {
           reject(error);
         } else {
           const orders = JSON.parse(JSON.stringify(data));
           const arrayOrdersIds = [];
-          orders.forEach(order => {
+          orders.forEach((order) => {
             arrayOrdersIds.push(order.order_id);
           });
           resolve(arrayOrdersIds);
@@ -199,43 +200,45 @@ const getAllOrdersByUserId = async (id) => {
   }
 };
 
-// OBTENER TODAS LAS ORDENES DE TODOS LOS USUARIOS (Solo retorna las id. Solo ADMIN) 
+// OBTENER TODAS LAS ORDENES DE TODOS LOS USUARIOS (Solo retorna las id. Solo ADMIN)
 const getAllOrdersonDB = async () => {
   try {
     const arrayOrdersIds = await new Promise((resolve, reject) => {
-      const sqlQuery = "SELECT order_id FROM orders";
+      const sqlQuery = 'SELECT order_id FROM orders';
       dataBase.query(sqlQuery, (error, data) => {
         if (error) {
           reject(error);
         } else {
           const orders = JSON.parse(JSON.stringify(data));
           const arrayOrdersIds = [];
-          orders.forEach(order => {
+          orders.forEach((order) => {
             arrayOrdersIds.push(order.order_id);
           });
           resolve(arrayOrdersIds);
         }
       });
     });
+    console.log(arrayOrdersIds);
     return arrayOrdersIds;
   } catch (error) {
     throw new Error(error);
   }
-
 };
 
 // OBTENER TODAS LAS ORDENES DETALLADAS DE UN USUARIO (Para ADMIN: Muestra órdenes detalladas. Para USER: Muestra las órdenes SOLO si son propias)
 const getAllOrdesDetails = async (arrayOrders) => {
   try {
     let arrayOrdersDetails = [];
-    await Promise.all(arrayOrders.map(async (order) => {
-      try {
-        let orderDetail = await getOrderDetailByOrderId(order);
-        arrayOrdersDetails.push(orderDetail);
-      } catch (error) {
-        throw new Error(error);
-      }
-    }));
+    await Promise.all(
+      arrayOrders.map(async (order) => {
+        try {
+          let orderDetail = await getOrderDetailByOrderId(order);
+          arrayOrdersDetails.push(orderDetail);
+        } catch (error) {
+          throw new Error(error);
+        }
+      })
+    );
     return arrayOrdersDetails;
   } catch (error) {
     throw new Error(error);
@@ -246,7 +249,7 @@ const getAllOrdesDetails = async (arrayOrders) => {
 const getOrderDetailByOrderId = async (orderId) => {
   try {
     const order_id = await new Promise((resolve, reject) => {
-      const sqlQuery = "SELECT order_id FROM orders WHERE order_id = ?;";
+      const sqlQuery = 'SELECT order_id FROM orders WHERE order_id = ?;';
       dataBase.query(sqlQuery, [orderId], (error, data) => {
         if (error) {
           reject(error);
@@ -256,7 +259,7 @@ const getOrderDetailByOrderId = async (orderId) => {
       });
     });
     const user_id = await new Promise((resolve, reject) => {
-      const sqlQuery = "SELECT user_id FROM orders WHERE order_id = ?;";
+      const sqlQuery = 'SELECT user_id FROM orders WHERE order_id = ?;';
       dataBase.query(sqlQuery, [orderId], (error, data) => {
         if (error) {
           reject(error);
@@ -266,7 +269,7 @@ const getOrderDetailByOrderId = async (orderId) => {
       });
     });
     const payment_method = await new Promise((resolve, reject) => {
-      const sqlQuery = "SELECT payment_method FROM orders WHERE order_id = ?;";
+      const sqlQuery = 'SELECT payment_method FROM orders WHERE order_id = ?;';
       dataBase.query(sqlQuery, [orderId], (error, data) => {
         if (error) {
           reject(error);
@@ -276,7 +279,7 @@ const getOrderDetailByOrderId = async (orderId) => {
       });
     });
     const status = await new Promise((resolve, reject) => {
-      const sqlQuery = "SELECT status FROM orders WHERE order_id = ?;";
+      const sqlQuery = 'SELECT status FROM orders WHERE order_id = ?;';
       dataBase.query(sqlQuery, [orderId], (error, data) => {
         if (error) {
           reject(error);
@@ -286,7 +289,7 @@ const getOrderDetailByOrderId = async (orderId) => {
       });
     });
     const total = await new Promise((resolve, reject) => {
-      const sqlQuery = "SELECT total FROM orders WHERE order_id = ?;";
+      const sqlQuery = 'SELECT total FROM orders WHERE order_id = ?;';
       dataBase.query(sqlQuery, [orderId], (error, data) => {
         if (error) {
           reject(error);
@@ -296,7 +299,8 @@ const getOrderDetailByOrderId = async (orderId) => {
       });
     });
     const order = await new Promise((resolve, reject) => {
-      const sqlQuery = "SELECT quantity, (SELECT name FROM products WHERE product_id = details.product_id) AS product, (SELECT price FROM products WHERE product_id = details.product_id) AS unitary, (SELECT price FROM products WHERE product_id = details.product_id) * quantity AS Total FROM details WHERE order_id = ?;";
+      const sqlQuery =
+        'SELECT quantity, (SELECT name FROM products WHERE product_id = details.product_id) AS product, (SELECT price FROM products WHERE product_id = details.product_id) AS unitary, (SELECT price FROM products WHERE product_id = details.product_id) * quantity AS Total FROM details WHERE order_id = ?;';
       dataBase.query(sqlQuery, [orderId], (error, data) => {
         if (error) {
           reject(error);
@@ -305,7 +309,16 @@ const getOrderDetailByOrderId = async (orderId) => {
         }
       });
     });
-    return ([{ order_id: order_id[0].order_id, user_id: user_id[0].user_id, payment_method: payment_method[0].payment_method, total: total[0].total, status: status[0].status, datails: order }]);
+    return [
+      {
+        order_id: order_id[0].order_id,
+        user_id: user_id[0].user_id,
+        payment_method: payment_method[0].payment_method,
+        total: total[0].total,
+        status: status[0].status,
+        datails: order
+      }
+    ];
   } catch (error) {
     throw new Error(error);
   }
@@ -316,7 +329,7 @@ const saveOrderOnDB = async (token, payment_method, arrayOrders) => {
   try {
     user_id = decodeToken(token, process.env.SECRET).user_id;
     const order_id = await new Promise((resolve, reject) => {
-      const sqlQuery = "INSERT INTO orders SET user_id = ?, payment_method = ?";
+      const sqlQuery = 'INSERT INTO orders SET user_id = ?, payment_method = ?';
       dataBase.query(sqlQuery, [user_id, payment_method], (error, data) => {
         if (error) {
           reject(error);
@@ -326,14 +339,16 @@ const saveOrderOnDB = async (token, payment_method, arrayOrders) => {
       });
     });
     let arrayOrdersDetails = [];
-    await Promise.all(arrayOrders.map(async (orderDetails) => {
-      try {
-        let orderDetail = await saveDetailsOnDB(order_id, orderDetails);
-        arrayOrdersDetails.push(orderDetail);
-      } catch (error) {
-        throw new Error(error);
-      }
-    }));
+    await Promise.all(
+      arrayOrders.map(async (orderDetails) => {
+        try {
+          let orderDetail = await saveDetailsOnDB(order_id, orderDetails);
+          arrayOrdersDetails.push(orderDetail);
+        } catch (error) {
+          throw new Error(error);
+        }
+      })
+    );
     return order_id;
   } catch (error) {
     throw new Error(error);
@@ -344,7 +359,7 @@ const saveOrderOnDB = async (token, payment_method, arrayOrders) => {
 const saveDetailsOnDB = async (order_id, orderDetails) => {
   try {
     await new Promise((resolve, reject) => {
-      const sqlQuery = "INSERT INTO details SET order_id = ?, product_id = ?, quantity = ? ";
+      const sqlQuery = 'INSERT INTO details SET order_id = ?, product_id = ?, quantity = ? ';
       dataBase.query(sqlQuery, [order_id, orderDetails.product_id, orderDetails.quantity], (error, data) => {
         if (error) {
           reject(error);
@@ -361,25 +376,26 @@ const saveDetailsOnDB = async (order_id, orderDetails) => {
 // ACTUALIZAR EL PRECIO TOTAL DE UNA ORDEN EN LA BASE DE DATOS
 const getPrice = async (order_id, order) => {
   try {
-
-    const productsId = order.map(el => el.product_id);
-    const productsQuantity = order.map(el => el.quantity);
+    const productsId = order.map((el) => el.product_id);
+    const productsQuantity = order.map((el) => el.quantity);
     let prices = [];
-    await Promise.all(productsId.map(async (id) => {
-      try {
-        let orderDetail = await price(id);
-        prices.push(orderDetail);
-      } catch (error) {
-        throw new Error(error);
-      }
-    }));
+    await Promise.all(
+      productsId.map(async (id) => {
+        try {
+          let orderDetail = await price(id);
+          prices.push(orderDetail);
+        } catch (error) {
+          throw new Error(error);
+        }
+      })
+    );
     prices = JSON.parse(JSON.stringify(prices));
     let resultado = 0;
     for (let index = 0; index < productsQuantity.length; index++) {
       resultado += productsQuantity[index] * prices[index];
     }
     return new Promise((resolve, reject) => {
-      const sqlQuery = "UPDATE orders SET total = ? WHERE order_id = ?";
+      const sqlQuery = 'UPDATE orders SET total = ? WHERE order_id = ?';
       dataBase.query(sqlQuery, [resultado, order_id], (error, data) => {
         if (error) {
           reject(error);
@@ -396,7 +412,7 @@ const getPrice = async (order_id, order) => {
 // función auxiliar para obtener el precio de un producto
 const price = (id) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = "SELECT price FROM products WHERE product_id = ?";
+    const sqlQuery = 'SELECT price FROM products WHERE product_id = ?';
     dataBase.query(sqlQuery, [id], (error, data) => {
       if (error) {
         reject(error);
@@ -410,7 +426,7 @@ const price = (id) => {
 // ACTUALIZAR EL ESTADO DE UNA ORDER (Solo ADMIN)
 const updateOrderOnDB = (status, order_id) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = "UPDATE orders SET status = ? WHERE order_id = ?";
+    const sqlQuery = 'UPDATE orders SET status = ? WHERE order_id = ?';
     dataBase.query(sqlQuery, [status, order_id], (error, order) => {
       if (error) {
         reject(error);
@@ -424,7 +440,7 @@ const updateOrderOnDB = (status, order_id) => {
 // ELIMINAR ORDEN DE LA BASE DE DATOS (Solo ADMIN)
 const deleteOrderonDB = (id) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = "DELETE FROM orders WHERE order_id = ?";
+    const sqlQuery = 'DELETE FROM orders WHERE order_id = ?';
     dataBase.query(sqlQuery, [id], (error, order) => {
       if (error) {
         reject(error);
@@ -434,7 +450,6 @@ const deleteOrderonDB = (id) => {
     });
   });
 };
-
 
 module.exports = {
   hashPassword,

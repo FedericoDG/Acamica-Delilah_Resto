@@ -13,7 +13,7 @@ const router = Router();
 router.get('/', [checkToken], getProducts);
 
 // OBTENER UN PRODUCTO
-router.get('/:id', [checkToken], getProduct);
+router.get('/:id', [checkToken], idExist, getProduct);
 
 // CARGAR UN PRODUCTO
 router.post('/', [checkToken, isAdmin, verifyBodyProduct], createProduct);

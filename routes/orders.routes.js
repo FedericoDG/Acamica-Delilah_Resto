@@ -15,7 +15,7 @@ const idEqualUserid = require('../middlewares/users.id_is_userid');
 const router = Router();
 
 // OBTENER UNA ORDEN
-router.get('/:id', [checkToken, userIdHasOrderId, orderExist], getOrder);
+router.get('/:id', [checkToken, isAdmin, userIdHasOrderId, orderExist], getOrder);
 
 // OBTENER TODAS LA ORDENES DE UN USUARIO
 router.get('/user/:id', [checkToken, idEqualUserid, userIdExist, userHasOrders], getUserOrders);

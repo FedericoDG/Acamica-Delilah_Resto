@@ -11,7 +11,6 @@ const ordersCheckBody = async (req, res = response, next) => {
     });
   }
   payment_method = payment_method.toUpperCase();
-  payment_method;
   if (payment_method !== 'CASH' && payment_method !== 'DEBIT' && payment_method !== 'CREDIT') {
     return res.status(400).json({
       mensaje: 'El campo payment_method deber ser: CASH, DEBIT o CREDIT.'
@@ -44,7 +43,6 @@ const ordersCheckBody = async (req, res = response, next) => {
     });
   }
   const productsId = order.map(el => el.product_id);
-
   let flag2 = '';
   await Promise.all(productsId.map(async (product) => {
     try {
