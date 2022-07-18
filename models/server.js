@@ -7,7 +7,7 @@ const dataBase = require('../database/conection');
 class Server {
   constructor() {
     this.app = express();
-    this.port = process.env.EXPRESS_PORT;
+    this.port = process.env.EXPRESS_PORT || 3000;
     this.usersRoutes = '/v1/users';
     this.productsRoutes = '/v1/products';
     this.ordersRoutes = '/v1/orders';
